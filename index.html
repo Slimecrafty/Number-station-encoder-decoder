@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Station Alpha - Krypto-Dekoder</title>
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #00ff66;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1, h2 {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #00ff66;
+            text-shadow: 0 0 10px #00ff66;
+        }
+        .container {
+            border: 1px solid #00ff66;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.2);
+            background-color: #111827;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            background-color: #000;
+            border: 1px solid #00ff66;
+            color: #00ff66;
+            font-family: 'Courier New', Courier, monospace;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #00ff66;
+            border: none;
+            color: #000;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        button:hover {
+            background-color: #00cc52;
+            box-shadow: 0 0 10px #00ff66;
+        }
+        .output-box {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px dashed #00ff66;
+            background-color: #05070c;
+            min-height: 50px;
+            white-space: pre-wrap;
+        }
+        .info {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>STATION ALPHA</h1>
+    <h2>Krypto-Funkspiel Dekoder</h2>
+
+    <div class="container">
+        <p style="font-size: 14px; text-align: center;">=== ÖFFENTLICHES RÄTSEL-TOOL ===</p>
+        
+        <label for="cipherInput">1. Empfangene Funk-Zahlen (mit Leerzeichen trennen):</label>
+        <textarea id="cipherInput" rows="4" placeholder="Beispiel: 145 032 099 211 ..."></textarea>
+        <div class="info">Tippe hier alle gehörten Zahlenblöcke hintereinander ein.</div>
+
+        <label for="keyInput">2. OTP-Passwort / Schlüssel von der Webseite:</label>
+        <input type="text" id="keyInput" placeholder="Hier das tägliche Passwort einfügen">
+        
+        <button onclick="decryptMessage()">Nachricht Entschlüsseln</button>
+
+        <h2>Klartext-Ausgabe:</h2>
+        <div class="output-box" id="output">Bereit für Dekodierung...</div>
+    </div>
+
+    <script>
+        function decryptMessage() {
+            const cipherText = document.getElementById('cipherInput').value.trim();
+            const keyText = document.getElementById('keyInput').value.trim();
+            const outputDiv = document.getElementById('output');
+
+            if (!cipherText || !keyText) {
+                outputDiv.innerText = "FEHLER: Bitte Zahlen UND Passwort eingeben!";
+                outputDiv.style.color = "#ff3333";
+                return;
+            }
+
+            // Zahlen in ein Array umwandeln (trennt bei jedem Leerzeichen oder Zeilenumbruch)
+            const cipherNumbers = cipherText.split(/\s+/).map(Number);
+            
+            // Das Passwort (Key) in Zeichen-Codes umwandeln
+            const keyCodes = [];
+            for (let i = 0; i < keyText.length; i++) {
+                keyCodes.push(keyText.charCodeAt(i));
+            }
+
+            let decryptedText = "";
+
+            // Entschlüsselung via XOR-Verfahren (klassisches digitales OTP)
+            for (let i = 0; i < cipherNumbers.length; i++) {
+                if (isNaN(cipherNumbers[i])) continue; // Ignoriere Fehlertexte
+
+                // Der Schlüssel wiederholt sich, falls das Passwort kürzer ist als die Nachricht
+                // (Für echtes OTP sollte das Passwort aber IMMER länger sein!)
+                const currentKey = keyCodes[i % keyCodes.length];
+
+                // XOR Rückrechnung
+                const decryptedCharCode = cipherNumbers[i] ^ currentKey;
+                
+                // Code zurück in echten Buchstaben umwandeln
+                decryptedText += String.fromCharCode(decryptedCharCode);
+            }
+
+            outputDiv.innerText = decryptedText;
+            outputDiv.style.color = "#00ff66";
+        }
+    </script>
+
+</body>
+</html>
