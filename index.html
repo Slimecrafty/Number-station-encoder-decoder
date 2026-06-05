@@ -157,12 +157,12 @@
     <h1>Zahlenstation</h1>
     <div class="subtitle">=== CODE DECODER & ENCODER ===</div>
 
-    <button class="help-btn" onclick="openHelp()">⚙️ Genaue Anleitung öffnen</button>
+    <button class="help-btn" onclick="openHelp()">⚙️ Sende-Ablauf & Anleitung öffnen</button>
 
     <div class="container" style="margin-top: 20px;">
         <div class="section-title">1. Nachricht verschlüsseln (Encoder)</div>
         
-        <label for="encText">Klartext:</label>
+        <label for="encText">Klartext (Deine geheime Nachricht):</label>
         <textarea id="encText" rows="3" placeholder="Beispiel: Treffen um 15 Uhr."></textarea>
         
         <label for="encKey">OTP-Zahlenliste (Jede Zahl mit Leerzeichen getrennt):</label>
@@ -171,20 +171,20 @@
             <button class="rand-btn" onclick="generateRandomKey()">🎲 OTP-Zahlenliste generieren</button>
         </div>
         
-        <button onclick="encrypt()">Funk-Zahlen generieren</button>
+        <button onclick="encrypt()">Funk-Text generieren</button>
         
-        <label>Generierte Zahlen (1 Zahl pro Buchstabe):</label>
+        <label>Generierte Ansage für die Zahlenstation:</label>
         <div class="output-box" id="encOutput">Noch keine Daten generiert...</div>
     </div>
 
     <div class="container">
         <div class="section-title">2. Nachricht entschlüsseln (Decoder)</div>
         
-        <label for="decCipher">Empfangene Zahlen (Durch Leerzeichen getrennt):</label>
+        <label for="decCipher">Empfangene Zahlenreihen (Ohne die Agentennummer am Anfang!):</label>
         <textarea id="decCipher" rows="3" placeholder="Beispiel: 142 85 9 204 44"></textarea>
         
         <label for="decKey">Die OTP-Zahlenliste von der Webseite:</label>
-        <input type="text" id="decKey" placeholder="Füge hier die Zahlenliste ein">
+        <input type="text" id="decKey" placeholder="Füge hier die Zahlenliste der Webseite ein">
         
         <button onclick="decrypt()">Nachricht entschlüsseln</button>
         
@@ -196,22 +196,28 @@
     <div id="helpModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeHelp()">&times;</span>
-            <h2>Strikte Einzelzahlen-Zuordnung (1 Buchstabe = 1 Zahl)</h2>
-            <p>Jeder Buchstabe wird durch genau eine einzige Zahl verschlüsselt. Diese Zahlen können 1-, 2- oder 3-stellig sein.</p>
+            <h2>Beschreibung & Sende-Ablauf</h2>
+            <p>Dieses System ahmt das Verhalten echter historischer Kurzwellen-Zahlenstationen nach. Der Ablauf ist in Kennung, Ankündigung und die eigentlichen Datenblöcke unterteilt.</p>
             
-            <h3>1. Das OTP-Zahlenpasswort</h3>
-            <p>Klicke auf den gelben Button, um eine Liste von Zufallszahlen zu generieren, die alle durch ein Leerzeichen getrennt sind (z. B. <code>142 9 85 211 4</code>). Für jeden Buchstaben des Textes wird genau eine dieser Zahlen verbraucht.</p>
-
-            <h3>2. Das mathematische Prinzip</h3>
-            <p>Wenn du den Text verschlüsselst, passiert folgendes:</p>
+            <h3>1. Die Kennung am Anfang</h3>
+            <p>Echte Stationen riefen ihre Agenten mit einer festen Zahlenkennung (Agentennummer), gefolgt von der Anzahl der kommenden Gruppen auf. Im generierten Text siehst du am Anfang standardmäßig folgendes Format:</p>
             <div class="step">
-                Buchstabe 1 (z. B. 'T') + OTP-Zahl 1 (z. B. 142) = Funk-Zahl 1<br>
-                Buchstabe 2 (z. B. 'r') + OTP-Zahl 2 (z. B. 9) = Funk-Zahl 2
+                ACHTUNG ACHTUNG [324/36] [324/36] ...
             </div>
-            <p>Die Zahlen, die am Ende herauskommen, sind ebenfalls einzeln mit Leerzeichen getrennt und können 1-, 2- oder 3-stellig sein.</p>
+            <p>Das bedeutet: Agentennummer <code>324</code>, Gruppenlänge der Nachricht <code>36</code>. Das wird mehrmals wiederholt, damit der Empfänger Zeit hat, seinen Block bereitzulegen.</p>
 
-            <h3>3. Wichtig bei der Eingabe (Decoder)</h3>
-            <p>Es muss darauf geachtet werden, dass sowohl im oberen Feld (die empfangenen Zahlen) als auch im unteren Feld (die OTP-Zahlenliste) alle Zahlen sauber durch ein einzelnes Leerzeichen getrennt eingegeben werden.</p>
+            <h3>2. Wie du den Funkspruch vorliest (Beispiel)</h3>
+            <p>Um die richtige Atmosphäre zu erzeugen, sprichst du die Zahlen monoton und mit kurzen Pausen. Wenn du den generierten Text vorliest, klingt das so:</p>
+            <div class="step" style="color: #fff;">
+                "Achtung... Achtung... Drei-Zwei-Vier [Pause] Drei-Sechs... <br>
+                Achtung... Achtung... Drei-Zwei-Vier [Pause] Drei-Sechs... <br>
+                Hier kommen die Zahlenreihen... <br>
+                Erste Gruppe: 142... 85... 9... 204... 44... [Pause] <br>
+                Zweite Gruppe: ..."
+            </div>
+
+            <h3>3. Wichtig beim Entschlüsseln (Decoder)</h3>
+            <p>Wenn dein Kumpel die Nachricht empfängt und in das Decoder-Feld eintippt, darf er <strong>nur die reinen verschlüsselten Zahlenreihen</strong> dort einfügen. Die Agentennummer am Anfang (<code>ACHTUNG 324/36</code>) wird vom Decoder ignoriert bzw. darf nicht in das Feld eingetippt werden, da sie nicht Teil des verschlüsselten Textes ist.</p>
             
             <button onclick="closeHelp()" style="background-color: #ffcc00; color: #000;">Schließen</button>
         </div>
@@ -268,7 +274,12 @@
                 cipherNumbers.push(encryptedNum);
             }
 
-            outputDiv.innerText = cipherNumbers.join(" ");
+            // Historische Einleitung zusammenbauen
+            const agentNum = "324";
+            const groupCount = cipherNumbers.length;
+            const header = `ACHTUNG ACHTUNG [${agentNum}/${groupCount}] [${agentNum}/${groupCount}] [${agentNum}/${groupCount}]\n\nZahlenreihen:\n`;
+
+            outputDiv.innerText = header + cipherNumbers.join(" ");
             outputDiv.style.color = "#00ff66";
         }
 
