@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Station Alpha - Krypto Kommandozentrale v3</title>
+    <title>Zahlenstation Code Decoder & Encoder</title>
     <style>
         body {
             background-color: #0b0f19;
@@ -150,43 +150,41 @@
             color: #00ff66;
             font-size: 13px;
         }
-        ol { padding-left: 20px; }
-        li { margin-bottom: 8px; }
     </style>
 </head>
 <body>
 
-    <h1>STATION ALPHA</h1>
-    <div class="subtitle">=== LEGALE KRYPTO-FUNKSPIEL ZENTRALE v3 ===</div>
+    <h1>Zahlenstation</h1>
+    <div class="subtitle">=== CODE DECODER & ENCODER ===</div>
 
-    <button class="help-btn" onclick="openHelp()">⚙️ Detaillierte Schritt-für-Schritt-Hilfe einblenden</button>
+    <button class="help-btn" onclick="openHelp()">⚙️ Genaue Anleitung öffnen</button>
 
     <div class="container" style="margin-top: 20px;">
-        <div class="section-title">1. Sender: Nachricht verschlüsseln (Encoder)</div>
+        <div class="section-title">1. Nachricht verschlüsseln (Encoder)</div>
         
-        <label for="encText">Geheimer Klartext (Nachricht an deinen Kumpel):</label>
-        <textarea id="encText" rows="3" placeholder="Beispiel: Treffen um 15 Uhr am alten Turm."></textarea>
+        <label for="encText">Klartext:</label>
+        <textarea id="encText" rows="3" placeholder="Beispiel: Treffen um 15 Uhr."></textarea>
         
-        <label for="encKey">Langes OTP-Passwort / Schlüssel (Muss auf deiner Website stehen):</label>
+        <label for="encKey">OTP-Zahlenliste (Jede Zahl mit Leerzeichen getrennt):</label>
         <div class="flex-row">
-            <input type="text" id="encKey" placeholder="Eigenes Passwort eingeben oder rechts generieren...">
-            <button class="rand-btn" onclick="generateRandomKey()">🎲 200er Zufall</button>
+            <input type="text" id="encKey" placeholder="Zahlen mit Leerzeichen getrennt eingeben oder rechts generieren...">
+            <button class="rand-btn" onclick="generateRandomKey()">🎲 OTP-Zahlenliste generieren</button>
         </div>
         
-        <button onclick="encrypt()">Zahlenblöcke generieren</button>
+        <button onclick="encrypt()">Funk-Zahlen generieren</button>
         
-        <label>Generierte Zahlenblöcke für den Funkspruch:</label>
+        <label>Generierte Zahlen (1 Zahl pro Buchstabe):</label>
         <div class="output-box" id="encOutput">Noch keine Daten generiert...</div>
     </div>
 
     <div class="container">
-        <div class="section-title">2. Empfänger: Nachricht entschlüsseln (Decoder)</div>
+        <div class="section-title">2. Nachricht entschlüsseln (Decoder)</div>
         
-        <label for="decCipher">Gehörte Funk-Zahlen (Durch Leerzeichen getrennt):</label>
-        <textarea id="decCipher" rows="3" placeholder="Beispiel: 045 112 003 022 091"></textarea>
+        <label for="decCipher">Empfangene Zahlen (Durch Leerzeichen getrennt):</label>
+        <textarea id="decCipher" rows="3" placeholder="Beispiel: 142 85 9 204 44"></textarea>
         
-        <label for="decKey">Das lange OTP-Passwort (Von der Webseite geholt):</label>
-        <input type="text" id="decKey" placeholder="Füge hier das gesamte lange Passwort von der Webseite ein">
+        <label for="decKey">Die OTP-Zahlenliste von der Webseite:</label>
+        <input type="text" id="decKey" placeholder="Füge hier die Zahlenliste ein">
         
         <button onclick="decrypt()">Nachricht entschlüsseln</button>
         
@@ -198,34 +196,28 @@
     <div id="helpModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeHelp()">&times;</span>
-            <h2>Echtes, langes One-Time-Pad (OTP)</h2>
-            <p>Diese Version nutzt die echte, kompromisslose Spionage-Logik: Das Passwort ist extrem lang, aber es wird immer nur exakt so viel davon verbraucht, wie deine Nachricht Buchstaben hat. Es gibt <strong>keine</strong> Wiederholungen!</p>
+            <h2>Strikte Einzelzahlen-Zuordnung (1 Buchstabe = 1 Zahl)</h2>
+            <p>Jeder Buchstabe wird durch genau eine einzige Zahl verschlüsselt. Diese Zahlen können 1-, 2- oder 3-stellig sein.</p>
             
-            <h3>1. Warum ein langes Passwort besser ist</h3>
-            <p>Wenn du ein kurzes Passwort wie <code>XYZ</code> nimmst, wiederholt sich das Passwort bei einem langen Text ständig. Das ist knackbar. <br>
-            Wenn du aber ein riesiges Passwort (z.B. mit dem gelben Button 200 Zeichen) erstellst, bekommt <strong>jeder einzelne Buchstabe</strong> einen völlig eigenen, unvorhersehbaren Code. Wenn deine Nachricht 15 Zeichen lang ist, benutzt das System die ersten 15 Zeichen des Passworts. Die restlichen 185 Zeichen werden einfach ignoriert.</p>
+            <h3>1. Das OTP-Zahlenpasswort</h3>
+            <p>Klicke auf den gelben Button, um eine Liste von Zufallszahlen zu generieren, die alle durch ein Leerzeichen getrennt sind (z. B. <code>142 9 85 211 4</code>). Für jeden Buchstaben des Textes wird genau eine dieser Zahlen verbraucht.</p>
 
-            <h3>2. Wichtig für Fehlerfreiheit</h3>
-            <p>Sollte der Decoder einmal Fehlermeldungen oder merkwürdige Zeichen ausspucken, liegt das meistens an zwei Ursachen:</p>
-            <ul>
-                <li><strong>Buchstaben vergessen:</strong> Du hast beim Vorlesen einen Zahlenblock vergessen oder dein Kumpel hat sich verschrieben. Da jeder Zahl genau ein Zeichen des OTP-Passworts zugeordnet ist, verschiebt sich bei einem Fehler ab dieser Stelle der gesamte restliche Text.</li>
-                <li><strong>Falsches Passwort:</strong> Wenn auch nur ein einziges Zeichen im Passwort-Feld fehlt oder falsch kopiert wurde, schlägt die Entschlüsselung fehl.</li>
-            </ul>
+            <h3>2. Das mathematische Prinzip</h3>
+            <p>Wenn du den Text verschlüsselst, passiert folgendes:</p>
+            <div class="step">
+                Buchstabe 1 (z. B. 'T') + OTP-Zahl 1 (z. B. 142) = Funk-Zahl 1<br>
+                Buchstabe 2 (z. B. 'r') + OTP-Zahl 2 (z. B. 9) = Funk-Zahl 2
+            </div>
+            <p>Die Zahlen, die am Ende herauskommen, sind ebenfalls einzeln mit Leerzeichen getrennt und können 1-, 2- oder 3-stellig sein.</p>
 
-            <h3>3. Ablauf kompakt</h3>
-            <ol>
-                <li>Klicke auf <strong>"🎲 200er Zufall"</strong>, um einen riesigen Schlüsselblock zu erzeugen. Kopiere ihn auf deine öffentliche Webseite.</li>
-                <li>Schreibe deinen Text und klicke auf "Zahlenblöcke generieren".</li>
-                <li>Lies die 3-stelligen Zahlen langsam im CB-Funk vor.</li>
-                <li>Dein Kumpel tippt die Zahlen mit Leerzeichen getrennt in den Decoder ein, fügt den riesigen Schlüssel von deiner Webseite ein und sieht sofort das Ergebnis!</li>
-            </ol>
+            <h3>3. Wichtig bei der Eingabe (Decoder)</h3>
+            <p>Es muss darauf geachtet werden, dass sowohl im oberen Feld (die empfangenen Zahlen) als auch im unteren Feld (die OTP-Zahlenliste) alle Zahlen sauber durch ein einzelnes Leerzeichen getrennt eingegeben werden.</p>
             
-            <button onclick="closeHelp()" style="background-color: #ffcc00; color: #000;">Schließen & Starten</button>
+            <button onclick="closeHelp()" style="background-color: #ffcc00; color: #000;">Schließen</button>
         </div>
     </div>
 
     <script>
-        // HILFE POP-UP STEUERUNG
         function openHelp() { document.getElementById('helpModal').style.display = 'block'; }
         function closeHelp() { document.getElementById('helpModal').style.display = 'none'; }
         window.onclick = function(event) {
@@ -233,70 +225,69 @@
             if (event.target == modal) { modal.style.display = 'none'; }
         }
 
-        // ZUFALLS-PASSWORT-GENERATOR (200 Zeichen)
         function generateRandomKey() {
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=";
-            let randomKey = "";
+            let randomNumbers = [];
             for (let i = 0; i < 200; i++) {
-                randomKey += chars.charAt(Math.floor(Math.random() * chars.length));
+                const num = Math.floor(Math.random() * 256);
+                randomNumbers.push(num);
             }
-            document.getElementById('encKey').value = randomKey;
+            document.getElementById('encKey').value = randomNumbers.join(" ");
         }
 
-        // ENCODER (VERSCHLÜSSELN - Striktes OTP)
         function encrypt() {
             const text = document.getElementById('encText').value;
-            const key = document.getElementById('encKey').value.trim();
+            const keyText = document.getElementById('encKey').value.trim();
             const outputDiv = document.getElementById('encOutput');
 
-            if (!text || !key) {
-                outputDiv.innerText = "FEHLER: Bitte Text UND Passwort eingeben!";
+            if (!text || !keyText) {
+                outputDiv.innerText = "FEHLER: Bitte Text UND die OTP-Zahlenliste eingeben!";
                 outputDiv.style.color = "#ff3333";
                 return;
             }
 
-            // WARNUNG, falls das eingegebene Passwort kürzer ist als der Text
-            if (key.length < text.length) {
-                outputDiv.innerText = "WARNUNG: Dein Passwort ist kürzer als dein Text! Für echtes OTP muss das Passwort länger sein.";
-                outputDiv.style.color = "#ffaa00";
+            const keyNumbers = keyText.split(/\s+/).map(Number);
+
+            if (keyNumbers.length < text.length) {
+                outputDiv.innerText = "FEHLER: Deine OTP-Zahlenliste ist zu kurz! Du hast " + text.length + " Buchstaben, aber nur " + keyNumbers.length + " OTP-Zahlen.";
+                outputDiv.style.color = "#ff3333";
                 return;
             }
 
             let cipherNumbers = [];
             for (let i = 0; i < text.length; i++) {
                 const textCharCode = text.charCodeAt(i);
-                const keyCharCode = key.charCodeAt(i); // Nutzt exakt die gleiche Position (kein Modulo/Wiederholung!)
+                const currentKeyNum = keyNumbers[i];
                 
-                // XOR Verrechnung
-                const xorResult = textCharCode ^ keyCharCode;
-                
-                // Formatierung als 3-stelliger Block
-                const formattedNum = String(xorResult).padStart(3, '0');
-                cipherNumbers.push(formattedNum);
+                if (isNaN(currentKeyNum)) {
+                    outputDiv.innerText = "FEHLER: Ungültige Zahl in der OTP-Liste gefunden!";
+                    outputDiv.style.color = "#ff3333";
+                    return;
+                }
+
+                const encryptedNum = (textCharCode + currentKeyNum) % 256;
+                cipherNumbers.push(encryptedNum);
             }
 
             outputDiv.innerText = cipherNumbers.join(" ");
             outputDiv.style.color = "#00ff66";
         }
 
-        // DECODER (ENTSCHLÜSSELN - Striktes OTP)
         function decrypt() {
             const cipherText = document.getElementById('decCipher').value.trim();
-            const key = document.getElementById('decKey').value.trim();
+            const keyText = document.getElementById('decKey').value.trim();
             const outputDiv = document.getElementById('decOutput');
 
-            if (!cipherText || !key) {
-                outputDiv.innerText = "FEHLER: Bitte Funk-Zahlen UND das lange Passwort eingeben!";
+            if (!cipherText || !keyText) {
+                outputDiv.innerText = "FEHLER: Bitte Zahlen UND die OTP-Zahlenliste eingeben!";
                 outputDiv.style.color = "#ff3333";
                 return;
             }
 
-            // Trennt Zahlen bei jedem Leerzeichen oder Zeilenumbruch
             const cipherNumbers = cipherText.split(/\s+/).map(Number);
+            const keyNumbers = keyText.split(/\s+/).map(Number);
             
-            // WARNUNG, falls das Passwort weniger Zeichen hat als empfangene Zahlen vorliegen
-            if (key.length < cipherNumbers.length) {
-                outputDiv.innerText = "FEHLER: Das eingegebene Passwort ist zu kurz für diese Anzahl an Zahlenblöcken!";
+            if (keyNumbers.length < cipherNumbers.length) {
+                outputDiv.innerText = "FEHLER: Die OTP-Zahlenliste hat weniger Zahlen als die Nachricht!";
                 outputDiv.style.color = "#ff3333";
                 return;
             }
@@ -306,10 +297,13 @@
             for (let i = 0; i < cipherNumbers.length; i++) {
                 if (isNaN(cipherNumbers[i])) continue;
 
-                const keyCharCode = key.charCodeAt(i); // Nutzt exakt die gleiche Position
-                
-                // XOR Rückrechnung
-                const decryptedCharCode = cipherNumbers[i] ^ keyCharCode;
+                const currentKeyNum = keyNumbers[i];
+                if (isNaN(currentKeyNum)) continue;
+
+                let decryptedCharCode = (cipherNumbers[i] - currentKeyNum) % 256;
+                if (decryptedCharCode < 0) {
+                    decryptedCharCode += 256;
+                }
                 
                 decryptedText += String.fromCharCode(decryptedCharCode);
             }
